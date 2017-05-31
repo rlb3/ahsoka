@@ -67,7 +67,7 @@ defmodule Chaibot.Ahsoka do
     nil
   end
 
-  defp start_repo(stack, message) do
+  defp start_repo(stack, message) when stack in ["elixir", "rails", "ios", "ember", "android", "react-native"] do
     message.user
     |> start_session
 
