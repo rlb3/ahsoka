@@ -84,11 +84,9 @@ defmodule Chaibot.Ahsoka do
   end
 
   defp session?(username) do
-    case Chaibot.Chaitools.Supervisor.build_tool(for: username) do
-      {:ok, _pid} ->
-        false
-      {:error, {:already_started, _pid}} ->
-        true
+    case Registry.lookup(:chaitools_bootstrap, username) do
+      [{_pid, _}] -> true
+      [] -> false
     end
   end
 
