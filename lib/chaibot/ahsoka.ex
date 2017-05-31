@@ -29,7 +29,7 @@ defmodule Chaibot.Ahsoka do
     {:ok, state}
   end
 
-  def handle_event(%{type: "message", text: "bootstrap name " <> name} = message, _slack, state) do
+  def handle_event(%{type: "message", text: "bootstrap name " <> name} = message, slack, state) do
     if session?(message.user) do
       name
       |> String.trim
