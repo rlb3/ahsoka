@@ -36,6 +36,7 @@ defmodule Chaibot.Chaitools.Server do
 
   def set_bot_info(user, {pid, channel}) do
     GenServer.cast(via_tuple(user), {:bot_info, {pid, channel}})
+    user
   end
 
   # Callbacks

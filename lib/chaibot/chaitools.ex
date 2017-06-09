@@ -15,23 +15,15 @@ defmodule Chaibot.Chaitools do
   def run(["readme", project], message: message,  slack: slack) do
     message.user
     |> start_session
-
-    text =
-      message.user
-      |> Chaibot.Chaitools.Server.readme(project)
-
-    send_message(text, slack, message)
+    |> Chaibot.Chaitools.Server.readme(project)
+    |> send_message(slack, message)
   end
 
   def run(["list"], message: message,  slack: slack) do
     message.user
-      |> start_session
-
-    text =
-      message.user
-      |> Chaibot.Chaitools.Server.list()
-
-      send_message(text, slack, message)
+    |> start_session
+    |> Chaibot.Chaitools.Server.list()
+    |> send_message(slack, message)
   end
 
   def run(["name", name], message: message, slack: slack) do
@@ -57,16 +49,13 @@ defmodule Chaibot.Chaitools do
   def run([stack], message: message, slack: slack) when stack in ["elixir", "rails", "ios", "ember", "android", "react-native"]do
       message.user
       |> start_session
-
-      message.user
       |> Chaibot.Chaitools.Server.set_bot_info({slack, message.channel})
-
-      message.user
       |> Chaibot.Chaitools.Server.build_stack(stack)
   end
 
   defp start_session(username) do
     Chaibot.Chaitools.Supervisor.build_tool(for: username)
+    username
   end
 
   defp session?(username) do
