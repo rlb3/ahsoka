@@ -26,30 +26,34 @@ defmodule Chaibot.Chaitools do
   end
 
   def run(["name", name], message: message, slack: slack) do
-      if session?(message.user) do
-        name
-        |> String.trim
-        |> name_repo(message)
-      else
-        send_message("Bootstrap stack not selected.", slack, message)
-      end
+    if session?(message.user) do
+      name
+      |> String.trim
+      |> name_repo(message)
+    else
+      send_message("Bootstrap stack not selected.", slack, message)
+    end
   end
 
   def run(["remote", remote], message: message, slack: slack) do
-      if session?(message.user) do
-        remote
-        |> String.trim
-        |> repo_remote(message)
-      else
-        send_message("Bootstrap stack not selected.", slack, message)
-      end
+    if session?(message.user) do
+      remote
+      |> String.trim
+      |> repo_remote(message)
+    else
+      send_message("Bootstrap stack not selected.", slack, message)
+    end
   end
 
   def run([stack], message: message, slack: slack) when stack in ["elixir", "rails", "ios", "ember", "android", "react-native"]do
-      message.user
-      |> start_session
-      |> Chaibot.Chaitools.Server.set_bot_info({slack, message.channel})
-      |> Chaibot.Chaitools.Server.build_stack(stack)
+    message.user
+    |> start_session
+    |> Chaibot.Chaitools.Server.set_bot_info({slack, message.channel})
+    |> Chaibot.Chaitools.Server.build_stack(stack)
+  end
+
+  def run(_, message: message, slack: slack) do
+    send_message("WAT?", slack, message)
   end
 
   defp start_session(username) do
@@ -58,8 +62,8 @@ defmodule Chaibot.Chaitools do
   end
 
   defp session?(username) do
-      case Registry.lookup(:chaitools_bootstrap, username) do
-        [{_pid, _}] -> true
+    case Registry.lookup(:chaitools_bootstrap, username) do
+      [{_pid, _}] -> true
       [] -> false
     end
   end
