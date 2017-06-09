@@ -1,4 +1,5 @@
 defmodule Chaibot.Chaitools do
+  import Chaibot.Utils
   @behaviour Chaibot.Behaviour
 
   def match?(text) do
@@ -11,11 +12,23 @@ defmodule Chaibot.Chaitools do
     run(cmds, args)
   end
 
-  def run(["list"], message: message,  slack: slack) do
+  def run(["readme", project], message: message,  slack: slack) do
+    message.user
+    |> start_session
+
+    text =
       message.user
+      |> Chaibot.Chaitools.Server.readme(project)
+
+    send_message(text, slack, message)
+  end
+
+  def run(["list"], message: message,  slack: slack) do
+    message.user
       |> start_session
 
-      text = message.user
+    text =
+      message.user
       |> Chaibot.Chaitools.Server.list()
 
       send_message(text, slack, message)
@@ -76,9 +89,5 @@ defmodule Chaibot.Chaitools do
   defp repo_remote(remote, message) do
     message.user
     |> Chaibot.Chaitools.Server.set_remote(remote)
-  end
-
-  def send_message(text, slack, message) do
-    send slack, {:message, text, message.channel}
   end
 end

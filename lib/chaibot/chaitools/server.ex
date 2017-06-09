@@ -30,6 +30,10 @@ defmodule Chaibot.Chaitools.Server do
     GenServer.call(via_tuple(user), :list)
   end
 
+  def readme(user, project) do
+    GenServer.call(via_tuple(user), {:readme, project})
+  end
+
   def set_bot_info(user, {pid, channel}) do
     GenServer.cast(via_tuple(user), {:bot_info, {pid, channel}})
   end
@@ -42,6 +46,12 @@ defmodule Chaibot.Chaitools.Server do
 
   def handle_call(:list, _from, state) do
     %Result{out: output} = Porcelain.shell("ls -lt", dir: @repo_path)
+    Process.send_after(self(), :stop, 1000)
+    {:reply, output, state}
+  end
+
+  def handle_call({:readme, project}, _from, state) do
+    %Result{out: output} = Porcelain.shell("cat #{project}/README.md", dir: @repo_path)
     Process.send_after(self(), :stop, 1000)
     {:reply, output, state}
   end
