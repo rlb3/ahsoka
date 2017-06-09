@@ -1,4 +1,6 @@
 defmodule Chaibot.Chaitools do
+  @behaviour Chaibot.Behaviour
+
   def match?(text) do
     text
     |> String.match?(~r/^bootstrap/)
@@ -9,7 +11,7 @@ defmodule Chaibot.Chaitools do
     run(cmds, args)
   end
 
-  def run(["list"], [message: message,  slack: slack]) do
+  def run(["list"], message: message,  slack: slack) do
       message.user
       |> start_session
 
