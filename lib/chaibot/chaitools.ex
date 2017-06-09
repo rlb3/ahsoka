@@ -1,6 +1,5 @@
 defmodule Chaibot.Chaitools do
-  import Chaibot.Utils
-  @behaviour Chaibot.Behaviour
+  use Chaibot
 
   def match?(text) do
     text
