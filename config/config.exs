@@ -26,6 +26,9 @@ config :logger, :console,
 config :slack, api_token: System.get_env("SLACK_TOKEN")
 config :porcelain, :driver, Porcelain.Driver.Goon
 
+config :chaibot, Chaibot.Ahsoka,
+  [{Chaibot.Chaitools, []}]
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"

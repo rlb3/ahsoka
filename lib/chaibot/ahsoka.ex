@@ -1,50 +1,20 @@
 defmodule Chaibot.Ahsoka do
   use Slack
 
+  @handlers Application.get_env(:chaibot, __MODULE__)
+
   def handle_connect(slack, state) do
     IO.puts "Connected as #{slack.me.name}"
     {:ok, state}
   end
 
-  def handle_event(%{type: "message", channel: channel, text: "bootstrap list"} = message, slack, state) do
-    message.user
-    |> start_session
-
-    message.user
-    |> Chaibot.Chaitools.Server.list()
-    |> send_message(channel, slack)
-
-    {:ok, state}
-  end
-
-  def handle_event(%{type: "message", text: "bootstrap remote " <> remote} = message, slack, state) do
-    if session?(message.user) do
-      remote
-      |> String.trim
-      |> repo_remote(message)
-    else
-      send_message("Bootstrap stack not selected.", message.channel, slack)
-    end
-
-    {:ok, state}
-  end
-
-  def handle_event(%{type: "message", text: "bootstrap name " <> name} = message, slack, state) do
-    if session?(message.user) do
-      name
-      |> String.trim
-      |> name_repo(message)
-    else
-      send_message("Bootstrap stack not selected.", message.channel, slack)
-    end
-
-    {:ok, state}
-  end
-
-  def handle_event(%{type: "message", text: "bootstrap " <> stack} = message, _slack, state) do
-      stack
-      |> String.trim
-      |> start_repo(message)
+  def handle_event(%{type: "message", text: text} = message, slack, state) do
+    @handlers
+    |> Enum.each(fn {handler, _args} ->
+      if handler.match?(text) do
+        handler.run(text, message: message, slack: self())
+      end
+    end)
 
     {:ok, state}
   end
@@ -58,45 +28,4 @@ defmodule Chaibot.Ahsoka do
   end
 
   def handle_info(_, _, state), do: {:ok, state}
-
-  defp start_session(username) do
-    Chaibot.Chaitools.Supervisor.build_tool(for: username)
-  end
-
-  defp start_repo(nil, _) do
-    nil
-  end
-
-  defp start_repo(stack, message) when stack in ["elixir", "rails", "ios", "ember", "android", "react-native"] do
-    message.user
-    |> start_session
-
-    message.user
-    |> Chaibot.Chaitools.Server.set_bot_info({self(), message.channel})
-
-    message.user
-    |> Chaibot.Chaitools.Server.build_stack(stack)
-  end
-
-  defp name_repo(name, message) do
-    message.user
-    |> Chaibot.Chaitools.Server.set_name(name)
-  end
-
-  defp session?(username) do
-    case Registry.lookup(:chaitools_bootstrap, username) do
-      [{_pid, _}] -> true
-      [] -> false
-    end
-  end
-
-  defp repo_remote("none", message) do
-    message.user
-    |> Chaibot.Chaitools.Server.set_remote("")
-  end
-
-  defp repo_remote(remote, message) do
-    message.user
-    |> Chaibot.Chaitools.Server.set_remote(remote)
-  end
 end
