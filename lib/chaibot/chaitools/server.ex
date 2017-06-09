@@ -41,7 +41,7 @@ defmodule Chaibot.Chaitools.Server do
   end
 
   def handle_call(:list, _from, state) do
-    %Result{out: output} = Porcelain.shell("ls -l", dir: @repo_path)
+    %Result{out: output} = Porcelain.shell("ls -lt", dir: @repo_path)
     Process.send_after(self(), :stop, 1000)
     {:reply, output, state}
   end
