@@ -35,7 +35,9 @@ defmodule Chaibot.Mixfile do
      {:gettext, "~> 0.11"},
      {:cowboy, "~> 1.0"},
      {:slack, "~> 0.11.0"},
-     {:porcelain, "~> 2.0"}]
+     {:porcelain, "~> 2.0"},
+     {:tesla, "~> 0.7.1"},
+     {:poison, ">= 1.0.0"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
