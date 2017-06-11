@@ -31,7 +31,8 @@ config :chaibot, Chaibot.Ahsoka,
    {Chaibot.Handler.Bitbucket, []}]
 
 config :chaibot, Chaibot.Handler.Bitbucket,
-  [username: System.get_env("BITBUCKET_USER"), password: System.get_env("BITBUCKET_PASS")]
+  [username: System.get_env("BITBUCKET_USER"),
+   password: System.get_env("BITBUCKET_PASS")]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
