@@ -1,8 +1,8 @@
 defmodule Chaibot.Handler.Bitbucket do
   use Chaibot
 
-  @bitbucket_user Application.get_env(:chaibot, Chaibot.Bitbucket)[:username]
-  @bitbucket_password Application.get_env(:chaibot, Chaibot.Bitbucket)[:password]
+  @bitbucket_user Application.get_env(:chaibot, __MODULE__)[:username]
+  @bitbucket_password Application.get_env(:chaibot, __MODULE__)[:password]
 
   def match?(text) do
     Regex.match?(~r/^bitbucket/, text)
