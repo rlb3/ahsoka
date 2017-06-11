@@ -27,7 +27,11 @@ config :slack, api_token: System.get_env("SLACK_TOKEN")
 config :porcelain, :driver, Porcelain.Driver.Goon
 
 config :chaibot, Chaibot.Ahsoka,
-  [{Chaibot.Chaitools, []}]
+  [{Chaibot.Chaitools, []},
+   {Chaibot.Bitbucket, []}]
+
+config :chaibot, Chaibot.Bitbucket,
+  [username: System.get_env("BITBUCKET_USER"), password: System.get_env("BITBUCKET_PASS")]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
