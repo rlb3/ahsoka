@@ -1,4 +1,4 @@
-defmodule Chaibot.Chaitools do
+defmodule Chaibot.Handler.Chaitools do
   use Chaibot
 
   def match?(text) do
