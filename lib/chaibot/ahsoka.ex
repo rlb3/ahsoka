@@ -10,7 +10,7 @@ defmodule Chaibot.Ahsoka do
 
   def handle_event(%{type: "message", text: text} = message, _slack, state) do
     @handlers
-    |> Enum.each(fn {handler, _args} ->
+    |> Enum.each(fn handler ->
       if handler.match?(text) do
         handler.run(text, message: message, slack: self())
       end

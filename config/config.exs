@@ -27,8 +27,8 @@ config :slack, api_token: System.get_env("SLACK_TOKEN")
 config :porcelain, :driver, Porcelain.Driver.Goon
 
 config :chaibot, Chaibot.Ahsoka,
-  [{Chaibot.Handler.Chaitools, []},
-   {Chaibot.Handler.Bitbucket, []}]
+  [Chaibot.Handler.Chaitools,
+   Chaibot.Handler.Bitbucket]
 
 config :chaibot, Chaibot.Handler.Bitbucket,
   [username: System.get_env("BITBUCKET_USER"),
